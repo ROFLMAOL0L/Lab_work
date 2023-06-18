@@ -1,16 +1,19 @@
 import turtle
 import main
+from tkinter import *
+from PIL import Image
 from generator import screen_divider
 
 
 class TurtleScreen:
-    def __init__(self, figures_mas):
+    def __init__(self, figures_mas, regions_positions=None):
         # Initialise the turtle library, get the figures list
         self.screen = turtle.getscreen()
         self.turtle_pen = turtle.Turtle()
         self.turtle_pen.speed(0)
         self.figures = figures_mas
         self.screen_width, self.screen_height = self.screen.screensize()[0], self.screen.screensize()[1]
+        self.regions_text_pos = regions_positions
 
     def draw_figure(self, figure_instance):
         # Draw a point
@@ -76,6 +79,16 @@ class TurtleScreen:
         for i in range(len(self.figures)):
             self.draw_figure(self.figures[i])
         self.turtle_pen.hideturtle()
+
+        # Write regions names if given
+        if self.regions_text_pos is not None:
+            for i in range(len(self.regions_text_pos)):
+                self.turtle_pen.up()
+                self.turtle_pen.goto((self.regions_text_pos[i][0], self.regions_text_pos[i][1]))
+                self.turtle_pen.down()
+                self.turtle_pen.write(str(i), font=("Arial", 8 + self.regions_text_pos[i][2] // 10, "normal"))
+                '''self.turtle_pen.goto((self.regions_text_pos[i][0], self.regions_text_pos[i][1] - self.regions_text_pos[i][2]))
+                self.turtle_pen.circle(self.regions_text_pos[i][2])'''
 
         # I really don`t know what is that but Turtle doesn't close without this line
         self.screen.mainloop()
